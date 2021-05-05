@@ -9,6 +9,8 @@ class HabitDao {
     final apiData = await NetworkUtils.get();
     print(apiData);
     List<Habit> apiHabits = apiData.map((element) {
+      print("000");
+      print(Habit.fromJson(element));
       return Habit.fromJson(element);
     }).toList();
     apiHabits.forEach(
@@ -29,6 +31,8 @@ class HabitDao {
     Map<String, dynamic> preparedHabit;
     if (fromApi) {
       preparedHabit = habit.toMap();
+      print('!!!!!!!');
+      print(preparedHabit);
     } else {
       String uid = await NetworkUtils.put(habit: habit.toJson());
       preparedHabit = habit.toMap();

@@ -92,75 +92,80 @@ class _TrackerNavigationBarState extends State<TrackerNavigationBar> {
                             expand: false,
                             builder: (BuildContext context,
                                 ScrollController scrollController) {
-                              return Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: TextField(
-                                            controller: textController,
-                                            decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.all(8),
-                                              border: new OutlineInputBorder(
-                                                borderRadius:
-                                                    new BorderRadius.circular(
-                                                        15.0),
-                                                borderSide: new BorderSide(),
+                              return SingleChildScrollView(
+                                child: Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Flexible(
+                                              child: TextField(
+                                                controller: textController,
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.all(8),
+                                                  border:
+                                                      new OutlineInputBorder(
+                                                    borderRadius:
+                                                        new BorderRadius
+                                                            .circular(15.0),
+                                                    borderSide:
+                                                        new BorderSide(),
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                            IconButton(
+                                              icon: Icon(Icons.search),
+                                              color: Color(0xFF1F91E7),
+                                              onPressed: () {
+                                                context
+                                                    .read<FilteredHabitsBloc>()
+                                                    .add(FilterUpdated(_value,
+                                                        textController.text));
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
                                         ),
-                                        IconButton(
-                                          icon: Icon(Icons.search),
-                                          color: Color(0xFF1F91E7),
-                                          onPressed: () {
-                                            context
-                                                .read<FilteredHabitsBloc>()
-                                                .add(FilterUpdated(_value,
-                                                    textController.text));
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      children: <Widget>[
-                                        ListTile(
-                                          title: const Text('По возрастанию'),
-                                          leading: Radio(
-                                            value: VisibilityFilter.up,
-                                            groupValue: _value,
-                                            onChanged:
-                                                (VisibilityFilter value) {
-                                              state(() {
-                                                _value = value;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        ListTile(
-                                          title: const Text('По убыванию'),
-                                          leading: Radio(
-                                            value: VisibilityFilter.down,
-                                            groupValue: _value,
-                                            onChanged:
-                                                (VisibilityFilter value) {
-                                              state(
-                                                () {
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          ListTile(
+                                            title: const Text('По возрастанию'),
+                                            leading: Radio(
+                                              value: VisibilityFilter.up,
+                                              groupValue: _value,
+                                              onChanged:
+                                                  (VisibilityFilter value) {
+                                                state(() {
                                                   _value = value;
-                                                },
-                                              );
-                                            },
+                                                });
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                          ListTile(
+                                            title: const Text('По убыванию'),
+                                            leading: Radio(
+                                              value: VisibilityFilter.down,
+                                              groupValue: _value,
+                                              onChanged:
+                                                  (VisibilityFilter value) {
+                                                state(
+                                                  () {
+                                                    _value = value;
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
                               );
                             },
                           ),

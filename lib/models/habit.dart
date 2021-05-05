@@ -103,7 +103,7 @@ class Habit extends Equatable {
         description: map['description'],
         type: map['type'],
         frequency: map['frequency'],
-        period: map['count'],
+        period: map['period'],
         priority: map['priority'],
         date: map['date']);
   }

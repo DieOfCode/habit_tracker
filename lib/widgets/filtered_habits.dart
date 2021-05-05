@@ -21,13 +21,13 @@ class FilteredHabits extends StatelessWidget {
         if (state is FilteredHabitsLoadInProgress) {
           return LoadingIndicator();
         } else if (state is FilteredHabitsLoadSuccess) {
-          final habits = state.filteredHabits
-              .where((element) => element.type == type)
-              .toList();
+          final habits = state.filteredHabits;
+          final typeHabit =
+              habits.where((element) => element.type == type).toList();
           return ListView.builder(
-            itemCount: habits.length,
+            itemCount: typeHabit.length,
             itemBuilder: (BuildContext context, int index) {
-              final habit = habits[index];
+              final habit = typeHabit[index];
               return HabitItem(
                 habit: habit,
                 onTap: () async {
