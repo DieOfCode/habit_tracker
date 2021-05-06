@@ -1,43 +1,11 @@
 import 'package:final_tracker/database/database.dart';
 import 'package:final_tracker/models/habit.dart';
-import 'package:final_tracker/networkUtils/networkUtil.dart';
 
 class HabitDao {
   final dbProvider = DatabaseProvider.dbProvider;
 
-  Future<void> synchronizationWithApi() async {
-    final apiData = await NetworkUtils.get();
-    print(apiData);
-    List<Habit> apiHabits = apiData.map((element) {
-      print("000");
-      print(Habit.fromJson(element));
-      return Habit.fromJson(element);
-    }).toList();
-    apiHabits.forEach(
-      (element) async {
-        Habit habit = await getHabitByUid(element.uid);
-        if (habit == null) {
-          createHabit(element, fromApi: true);
-        } else {
-          if (habit.date < element.date) {
-            updateHabitByUid(element);
-          }
-        }
-      },
-    );
-  }
-
-  Future<int> createHabit(Habit habit, {bool fromApi = false}) async {
-    Map<String, dynamic> preparedHabit;
-    if (fromApi) {
-      preparedHabit = habit.toMap();
-      print('!!!!!!!');
-      print(preparedHabit);
-    } else {
-      String uid = await NetworkUtils.put(habit: habit.toJson());
-      preparedHabit = habit.toMap();
-      preparedHabit.addAll({'uid': uid});
-    }
+  Future<int> createHabit(Habit habit, Map<String, dynamic> preparedHabit,
+      {bool fromApi}) async {
     final db = await dbProvider.database;
     var result = db.insert(Habit.table, preparedHabit);
     if (fromApi) {
@@ -104,9 +72,6 @@ class HabitDao {
 
   Future<int> updateHabit(Habit habit, {bool updatingApi = true}) async {
     final db = await dbProvider.database;
-    if (updatingApi) {
-      NetworkUtils.put(habit: habit.toJson());
-    }
     var result = await db.update(Habit.table, habit.toMap(),
         where: 'id = ?', whereArgs: [habit.id]);
     return result;
@@ -156,7 +121,6 @@ class HabitDao {
 
   Future<int> addCompletedMark(Habit habit) async {
     final db = await dbProvider.database;
-    NetworkUtils.put(habit: habit.toJson());
     int result = await db.insert(
         'completedDates', {'habit_id': habit.id, 'date': habit.doneDates.last});
     updateHabit(habit);

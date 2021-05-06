@@ -12,28 +12,28 @@ final Map<String, String> headers = {
 };
 
 class NetworkUtils {
-  static Future<List<dynamic>> get() async {
+  Future<List<dynamic>> get() async {
     final Uri fullUrl = Uri.parse(url);
 
     final response = await http.get(fullUrl, headers: headers);
     return jsonDecode(response.body);
   }
 
-  static Future<String> put({Map<String, dynamic> habit}) async {
+  Future<String> put({Map<String, dynamic> habit}) async {
     final Uri fullUrl = Uri.parse(url);
     final String body = jsonEncode(habit);
     final response = await http.put(fullUrl, headers: headers, body: body);
     return jsonDecode(response.body)['uid'];
   }
 
-  static Future<int> delete({String habitUid}) async {
+  Future<int> delete({String habitUid}) async {
     final Uri fullUrl = Uri.parse(url);
     final String body = jsonEncode({"uid": habitUid});
     final response = await http.delete(fullUrl, headers: headers, body: body);
     return response.statusCode;
   }
 
-  static void post({int date, String habitUid}) async {
+  void post({int date, String habitUid}) async {
     final Uri fullUrl = Uri.parse(urlForPost);
     final String body = jsonEncode({"date": date, "habit_uid": habitUid});
     final response = await http.post(fullUrl, headers: headers, body: body);

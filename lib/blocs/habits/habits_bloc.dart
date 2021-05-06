@@ -30,7 +30,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitState> {
 
   Stream<HabitState> _synchronizationWithApi() async* {
     try {
-      await this.habitRepository.habitDao.synchronizationWithApi();
+      await habitRepository.synchronizationWithApi();
       yield SynchronizationSuccess();
     } catch (exception) {
       print(exception);
@@ -71,10 +71,6 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitState> {
   Stream<HabitState> _mapHabitsUpdateCompletedToState(
       HabitUpdateCompleted event) async* {
     if (state is HabitsLoadSuccess) {
-      // final List<Habit> updatedHabits =
-      //     (state as HabitsLoadSuccess).habits.map((habit) {
-      //   return habit.id == event.habit.id ? event.habit : habit;
-      // }).toList();
       yield HabitsLoadSuccess(event.filteredHabit);
       _completedHabits(event.habit);
     }
